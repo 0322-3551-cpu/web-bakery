@@ -1,3 +1,3 @@
-export default function ManagerSection() {
-  return <div style={{padding: '50px', textAlign: 'center'}}><h1>Welcome to Manager Dashboard</h1></div>;
-}
+import React from 'react';
+const Dashboard = () => <h1>Dashboard Content Coming Soon...</h1>;
+export default Dashboard;

@@ -1,0 +1,130 @@
+/* --- SIDEBAR CONTAINER --- */
+.sidebar {
+  width: 260px;
+  background-color: #f3071d; 
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-shrink: 0;
+  height: 100vh;
+  font-family: Georgia, serif;
+}
+
+/* --- HEADER --- */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sidebar-logo-container {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
+}
+
+.logo-text h2 { 
+  margin: 0; 
+  font-size: 1.1rem; 
+  color: #f7dd30; 
+  font-weight: bold; 
+}
+
+.logo-text p { 
+  margin: 0; 
+  font-size: 0.8rem; 
+  color: #ffffff; 
+}
+
+/* --- USER INFO --- */
+.user-info { 
+  padding: 0 20px; 
+  margin-bottom: 20px; 
+}
+
+.user-info h3 { 
+  margin: 0; 
+  font-size: 0.90rem; 
+  color: #f7dd30; 
+}
+
+.user-info p { 
+  margin: 0; 
+  font-size: 0.8rem; 
+  color: #ffffff; 
+}
+
+/* --- NAVIGATION --- */
+.sidebar-nav { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  padding: 0 15px; 
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border: none;
+  background-color: #fcf6c4; 
+  font-size: 0.95rem;
+  color: #000; 
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item svg { color: #000; flex-shrink: 0; }
+
+.nav-item.active { 
+  background-color: #f7dd30 !important; 
+  color: #000 !important; 
+  font-weight: bold;
+}
+
+.nav-item:hover { background-color: #f7dd30; }
+
+/* --- FOOTER --- */
+.sidebar-footer { 
+  padding: 15px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+}
+
+.footer-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  border: none;
+  background: #fcf6c4; 
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #000;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.footer-nav-item:hover { background-color: #f7dd30; }
+
+.logout { color: red; }
