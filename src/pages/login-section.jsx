@@ -27,7 +27,7 @@ const LoginSection = ({ onLogin }) => {
         <img src={logo} alt="Bakery Logo" className="bakery-logo" />
 
         <div className="login-box">
-          <h1 className="welcome-text">Welcome Back!</h1>
+          <h1 className="welcome-text">Welcome Ka-Regis!</h1>
           <p className="subtitle">Log in to Manage your Bakery Operations</p>
 
           {error && <div className="error-message">{error}</div>}

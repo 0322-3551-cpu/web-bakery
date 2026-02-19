@@ -1,12 +1,3 @@
 import React from 'react';
-
-const SystemSettings = () => {
-  return (
-    <div>
-      <h1>System Settings Page</h1>
-      <p>Settings content will go here.</p>
-    </div>
-  );
-};
-
+const SystemSettings = () => <h1>System Settings Content Coming Soon...</h1>;
 export default SystemSettings;

@@ -40,7 +40,7 @@ body, html {
 
 .login-box {
   width: 680px;
-  min-height: 600px;
+  min-height: 624px;
   background-color: #fddb53;
   border: 3px solid #000000;
   border-radius: 30px;
