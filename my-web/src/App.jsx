@@ -1,21 +1,33 @@
-import React, { useState } from 'react'; // Added this
+import React, { useState } from 'react';
 import LoginSection from "./pages/login-section";
 import PackerSection from "./pages/packer-section";
 import SellerSection from "./pages/seller/seller-section";
 import ManagerSection from "./pages/manager-section";
 
 function App() {
-  // Define the state here!
   const [userRole, setUserRole] = useState('guest'); 
+
+  const handleLogout = () => {
+    setUserRole('guest');
+  };
 
   return (
     <div className="App">
-      {/* Pass the setUserRole function as a prop called onLogin */}
-      {userRole === 'guest' && <LoginSection onLogin={setUserRole} />}
-      
-      {userRole === 'packer' && <PackerSection />}
-      {userRole === 'seller' && <SellerSection />}
-      {userRole === 'manager' && <ManagerSection />}
+      {userRole === 'guest' && (
+        <LoginSection onLogin={setUserRole} />
+      )}
+
+      {userRole === 'packer' && (
+        <PackerSection onLogout={handleLogout} />
+      )}
+
+      {userRole === 'seller' && (
+        <SellerSection onLogout={handleLogout} />
+      )}
+
+      {userRole === 'manager' && (
+        <ManagerSection onLogout={handleLogout} />
+      )}
     </div>
   );
 }

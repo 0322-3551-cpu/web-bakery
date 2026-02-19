@@ -1,7 +1,8 @@
 import React from 'react';
-import '../../styles/seller/seller-sales.css'; 
+import { Trash2 } from 'lucide-react';
+import '../../styles/seller/seller-sales.css';
 
-const SellerCustom = ({ customOrders = [] }) => {
+const SellerCustom = ({ customOrders = [], onDelete }) => {
   return (
     <div className="sales-page-container">
       <div className="sales-header">
@@ -19,12 +20,13 @@ const SellerCustom = ({ customOrders = [] }) => {
               <th>Qty</th>
               <th>Amount</th>
               <th>Special Instructions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {customOrders.length === 0 ? (
               <tr>
-                <td colSpan="6" className="empty-row">
+                <td colSpan="7" className="empty-row">
                   No custom orders recorded yet
                 </td>
               </tr>
@@ -32,7 +34,7 @@ const SellerCustom = ({ customOrders = [] }) => {
               customOrders.map((order) => (
                 <tr key={order.id}>
                   <td>{order.date}</td>
-                  <td style={{ fontWeight: 'normal' }}>{order.cakeType}</td> 
+                  <td style={{ fontWeight: 'normal' }}>{order.cakeType}</td>
                   <td>{order.customer}</td>
                   <td>{order.qty}</td>
                   <td style={{ color: '#000', fontWeight: 'normal' }}>
@@ -42,6 +44,11 @@ const SellerCustom = ({ customOrders = [] }) => {
                     <span className="instructions-text">
                       {order.instructions || "—"}
                     </span>
+                  </td>
+                  <td>
+                    <button className="delete-btn" onClick={() => onDelete(order.id)}>
+                      <Trash2 size={16} />
+                    </button>
                   </td>
                 </tr>
               ))

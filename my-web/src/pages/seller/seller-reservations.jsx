@@ -1,6 +1,9 @@
 import React from 'react';
+import { Trash2 } from 'lucide-react';
 import '../../styles/seller/seller-sales.css';
-const SellerReservations = ({ reservations, onUpdateStatus }) => {
+
+const SellerReservations = ({ reservations, onUpdateStatus, onDelete }) => {
+
   return (
     <div className="sales-page-container">
       <div className="sales-header">
@@ -19,6 +22,7 @@ const SellerReservations = ({ reservations, onUpdateStatus }) => {
               <th>Amount</th>
               <th>Status</th>
               <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -38,7 +42,7 @@ const SellerReservations = ({ reservations, onUpdateStatus }) => {
                   </td>
                   <td>
                     {res.isCompleted ? (
-                      <span className="completed-text" style={{ color: '#03c04a', fontWeight: 'bold' }}>
+                      <span className="completed-text" style={{ color: '#000000', fontWeight: 'bold' }}>
                         Completed
                       </span>
                     ) : (
@@ -58,11 +62,16 @@ const SellerReservations = ({ reservations, onUpdateStatus }) => {
                       </div>
                     )}
                   </td>
+                  <td>
+                    <button className="delete-btn" onClick={() => onDelete(res.id)}>
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="empty-row">No reservations found.</td>
+                <td colSpan="9" className="empty-row">No reservations found.</td>
               </tr>
             )}
           </tbody>
@@ -71,4 +80,5 @@ const SellerReservations = ({ reservations, onUpdateStatus }) => {
     </div>
   );
 };
+
 export default SellerReservations;
