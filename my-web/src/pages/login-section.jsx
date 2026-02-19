@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import '../styles/login-section.css';
 import logo from '../assets/logo.png';
@@ -14,7 +14,7 @@ const LoginSection = ({ onLogin }) => {
       onLogin('packer');
     } else if (username === 'seller' && password === 'seller123') {
       onLogin('seller');
-      } else if (username === 'manager' && password === 'manager123') {
+    } else if (username === 'manager' && password === 'manager123') {
       onLogin('manager');
     } else {
       setError('Invalid Account. Please try again.');
@@ -34,9 +34,9 @@ const LoginSection = ({ onLogin }) => {
 
           <div className="form-group">
             <label>Username</label>
-            <input 
-              type="text" 
-              className="login-input" 
+            <input
+              type="text"
+              className="login-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -45,13 +45,13 @@ const LoginSection = ({ onLogin }) => {
           <div className="form-group">
             <label>Password</label>
             <div className="password-wrapper">
-              <input 
-                type={showPassword ? "text" : "password"}
-                className="login-input" 
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="login-input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button 
+              <button
                 type="button"
                 className="toggle-password-icon"
                 onClick={() => setShowPassword(!showPassword)}

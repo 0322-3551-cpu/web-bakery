@@ -4,13 +4,11 @@ import '../../styles/seller/seller-sales.css';
 const SellerMessages = ({ messages = [] }) => {
   return (
     <div className="sales-page-container">
-      {/* Header section: Just the Titles */}
       <div className="sales-header" style={{ marginBottom: '20px' }}>
         <h1 className="sales-title">Messages</h1>
         <p className="sales-subtitle">Communication with Packer</p>
       </div>
 
-      {/* Content area: Clean container with no headers or buttons */}
       <div className="table-container">
         <table className="sales-table">
           <tbody>

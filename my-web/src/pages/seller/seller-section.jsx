@@ -1,53 +1,69 @@
-import React, { useState, useEffect } from 'react';
+// ─── Imports ──────────────────────────────────────────────────────────────────
+import { useState } from 'react';
 import {
   LayoutDashboard, ShoppingCart, Calendar, Star,
   Truck, Package, MessageSquare, Settings, LogOut,
   Box, PlusCircle, Sparkles, X, CheckCircle
 } from 'lucide-react';
-import '../../styles/seller/seller-section.css';
+
 import logo from '../../assets/logo.png';
+import '../../styles/seller/seller-section.css';
+
 import SellerSales from './seller-sales';
 import SellerReservations from './seller-reservations';
 import SellerCustom from './seller-custom';
 import SellerMessages from './seller-messages';
+import SellerSettings from './seller-settings';
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+const cakePrices = {
+  "Chocolate Cake": 500,
+  "Vanilla Cake": 450,
+  "Red Velvet Cake": 600,
+  "Carrot Cake": 550,
+  "Cheesecake": 650,
+  "Black Forest Cake": 700,
+  "Strawberry Cake": 580,
+  "Mango Cake": 520
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
 const SellerSection = ({ onLogout }) => {
+
+  // ── UI State ──
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showToast, setShowToast] = useState(false);
+
+  // ── Modal State ──
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isResModalOpen, setIsResModalOpen] = useState(false);
   const [isMsgModalOpen, setIsMsgModalOpen] = useState(false);
   const [isCustomOrderModalOpen, setIsCustomOrderModalOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
+  // ── User State ──
+  const [fullName, setFullName] = useState("Mami Oni");
+
+  // ── Data State ──
   const [salesHistory, setSalesHistory] = useState([]);
   const [reservationsHistory, setReservationsHistory] = useState([]);
   const [customOrdersList, setCustomOrdersList] = useState([]);
-  const [packerMessage, setPackerMessage] = useState("");
 
+  // ── Form State ──
   const [selectedCake, setSelectedCake] = useState("Chocolate Cake");
   const [selectedPrice, setSelectedPrice] = useState(500);
   const [quantity, setQuantity] = useState(1);
   const [customerName, setCustomerName] = useState("");
   const [pickupDate, setPickupDate] = useState("");
-  
+  const [packerMessage, setPackerMessage] = useState("");
   const [customCakeType, setCustomCakeType] = useState("");
   const [customPrice, setCustomPrice] = useState(1000);
   const [customInstructions, setCustomInstructions] = useState("");
 
-  const cakePrices = {
-    "Chocolate Cake": 500,
-    "Vanilla Cake": 450,
-    "Red Velvet Cake": 600,
-    "Carrot Cake": 550,
-    "Cheesecake": 650,
-    "Black Forest Cake": 700,
-    "Strawberry Cake": 580,
-    "Mango Cake": 520
-  };
-
+  // ─── Derived Values ──────────────────────────────────────────────────────────
   const totalSales = salesHistory.reduce((sum, sale) => sum + sale.amount, 0);
   const orderCount = salesHistory.length;
 
+  // ─── Form Handlers ───────────────────────────────────────────────────────────
   const handleCakeChange = (e) => {
     const name = e.target.value;
     setSelectedCake(name);
@@ -65,6 +81,21 @@ const SellerSection = ({ onLogout }) => {
     setCustomInstructions("");
   };
 
+  // ─── Delete Handlers ───────────────────────────────────────────────────────────
+  const handleDeleteSale = (id) => {
+    setSalesHistory(prev => prev.filter(sale => sale.id !== id));
+  };
+
+  const handleDeleteReservation = (id) => {
+    setReservationsHistory(prev => prev.filter(res => res.id !== id));
+  };
+
+  const handleDeleteCustomOrder = (id) => {
+    setCustomOrdersList(prev => prev.filter(order => order.id !== id));
+    setSalesHistory(prev => prev.filter(sale => sale.id !== id));
+  };
+
+  // ─── Sale Handlers ───────────────────────────────────────────────────────────
   const handleRecordSale = () => {
     const newSale = {
       id: Date.now(),
@@ -77,62 +108,6 @@ const SellerSection = ({ onLogout }) => {
     setSalesHistory([newSale, ...salesHistory]);
     setIsModalOpen(false);
     resetForm();
-  };
-
-  const handleRecordReservation = () => {
-    const dateObj = new Date(pickupDate);
-    const formattedPickupDate = isNaN(dateObj.getTime())
-      ? pickupDate
-      : dateObj.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-    const newRes = {
-      id: Date.now(),
-      date: new Date().toLocaleDateString(),
-      cakeType: selectedCake,
-      customer: customerName || "Guest",
-      qty: quantity,
-      pickupDate: formattedPickupDate,
-      amount: selectedPrice * quantity,
-      status: 'Pending',
-      isCompleted: false 
-    };
-    setReservationsHistory([newRes, ...reservationsHistory]);
-    setIsResModalOpen(false);
-    resetForm();
-  };
-
-  const handleUpdateReservationStatus = (id, newStatus) => {
-    setReservationsHistory(prevReservations =>
-      prevReservations.map(res => {
-        if (res.id === id) {
-          if (res.isCompleted) return res;
-          if (newStatus === 'Picked Up') {
-            const completedSale = {
-              id: `sale-${res.id}`, 
-              date: new Date().toLocaleDateString(),
-              cakeType: res.cakeType,
-              customer: res.customer,
-              qty: res.qty,
-              amount: res.amount 
-            };
-            setSalesHistory(currentSales => {
-              const exists = currentSales.find(s => s.id === `sale-${res.id}`);
-              if (exists) return currentSales;
-              return [completedSale, ...currentSales];
-            });
-          }
-          return { ...res, status: newStatus, isCompleted: true };
-        }
-        return res;
-      })
-    );
-  };
-
-  const handleSendMessage = () => {
-    if (packerMessage.trim() === "") return;
-    setPackerMessage("");
-    setIsMsgModalOpen(false);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
   };
 
   const handleCreateCustomOrder = () => {
@@ -151,25 +126,69 @@ const SellerSection = ({ onLogout }) => {
     resetForm();
   };
 
+  // ─── Reservation Handlers ────────────────────────────────────────────────────
+  const handleRecordReservation = () => {
+    const dateObj = new Date(pickupDate);
+    const formattedPickupDate = isNaN(dateObj.getTime())
+      ? pickupDate
+      : dateObj.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+    const newRes = {
+      id: Date.now(),
+      date: new Date().toLocaleDateString(),
+      cakeType: selectedCake,
+      customer: customerName || "Guest",
+      qty: quantity,
+      pickupDate: formattedPickupDate,
+      amount: selectedPrice * quantity,
+      status: 'Pending',
+      isCompleted: false
+    };
+    setReservationsHistory([newRes, ...reservationsHistory]);
+    setIsResModalOpen(false);
+    resetForm();
+  };
+
+  const handleUpdateReservationStatus = (id, newStatus) => {
+    setReservationsHistory(prevReservations =>
+      prevReservations.map(res => {
+        if (res.id === id) {
+          if (res.isCompleted) return res;
+          if (newStatus === 'Picked Up') {
+            const completedSale = {
+              id: `sale-${res.id}`,
+              date: new Date().toLocaleDateString(),
+              cakeType: res.cakeType,
+              customer: res.customer,
+              qty: res.qty,
+              amount: res.amount
+            };
+            setSalesHistory(currentSales => {
+              const exists = currentSales.find(s => s.id === `sale-${res.id}`);
+              if (exists) return currentSales;
+              return [completedSale, ...currentSales];
+            });
+          }
+          return { ...res, status: newStatus, isCompleted: true };
+        }
+        return res;
+      })
+    );
+  };
+
+  // ─── Message Handler ─────────────────────────────────────────────────────────
+  const handleSendMessage = () => {
+    if (packerMessage.trim() === "") return;
+    setPackerMessage("");
+    setIsMsgModalOpen(false);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
+  // ─── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="dashboard-container">
-      {showToast && (
-        <div className="toast-container">
-          <div className="toast-content">
-            <div className="toast-icon-wrapper">
-              <CheckCircle size={20} color="#fff" />
-            </div>
-            <div className="toast-text">
-              <p className="toast-main">Message Sent</p>
-              <p className="toast-sub">The packer has been notified.</p>
-            </div>
-            <button className="toast-close" onClick={() => setShowToast(false)}>
-              <X size={14} />
-            </button>
-          </div>
-        </div>
-      )}
 
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo-container">
@@ -181,7 +200,7 @@ const SellerSection = ({ onLogout }) => {
           </div>
         </div>
         <div className="user-info">
-          <h3>Mami Oni</h3>
+          <h3>{fullName}</h3>
           <p>Seller</p>
         </div>
         <nav className="sidebar-nav">
@@ -209,12 +228,19 @@ const SellerSection = ({ onLogout }) => {
           </button>
         </nav>
         <div className="sidebar-footer">
-          <button className="footer-nav-item"><Settings size={18} /> <span>Settings</span></button>
-          <button className="footer-nav-item logout" onClick={onLogout}><LogOut size={18} /> <span>Logout</span></button>
+          <button className={`footer-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+            <Settings size={18} /> <span>Settings</span>
+          </button>
+          <button className="footer-nav-item logout" onClick={onLogout}>
+            <LogOut size={18} /> <span>Logout</span>
+          </button>
         </div>
       </aside>
 
+      {/* Main Content */}
       <main className="main-content">
+
+        {/* Dashboard Tab */}
         {activeTab === 'dashboard' && (
           <>
             <div className="stats-grid">
@@ -279,20 +305,26 @@ const SellerSection = ({ onLogout }) => {
           </>
         )}
 
-        {activeTab === 'sales' && <SellerSales transactions={salesHistory} />}
-        {activeTab === 'inventory' && <h1>Inventory Content Coming Soon...</h1>}
-        {activeTab === 'custom' && <SellerCustom customOrders={customOrdersList} />}
-        {activeTab === 'messages' && (
-          <SellerMessages onOpenMessageModal={() => setIsMsgModalOpen(true)} />
-        )}
+        {/* Other Tabs */}
+        {activeTab === 'sales' && <SellerSales transactions={salesHistory} onDelete={handleDeleteSale} />}
+        {activeTab === 'inventory'    && <h1>Inventory Content Coming Soon...</h1>}
+        {activeTab === 'custom' && <SellerCustom customOrders={customOrdersList} onDelete={handleDeleteCustomOrder} />}
+        {activeTab === 'messages'     && <SellerMessages onOpenMessageModal={() => setIsMsgModalOpen(true)} />}
         {activeTab === 'reservations' && (
           <SellerReservations
             reservations={reservationsHistory}
             onUpdateStatus={handleUpdateReservationStatus}
+            onDelete={handleDeleteReservation}
+          />
+        )}
+        {activeTab === 'settings' && (
+          <SellerSettings
+            currentName={fullName}
+            onSaveName={(newName) => setFullName(newName)}
           />
         )}
 
-
+        {/* New Sale Modal */}
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal-box">
@@ -314,7 +346,7 @@ const SellerSection = ({ onLogout }) => {
                 </div>
                 <div className="form-group">
                   <label>Quantity</label>
-                  <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 0)} min="1" />
+                  <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(e.target.value === '' ? '' : parseInt(e.target.value))} min="1" />
                   <span className="helper-text">Available: 18</span>
                 </div>
                 <div className="form-group">
@@ -328,12 +360,13 @@ const SellerSection = ({ onLogout }) => {
               </div>
               <div className="modal-footer">
                 <button className="record-sale-btn" onClick={handleRecordSale}>Record Sale</button>
-                <button className="cancel-sale-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                <button className="cancel-sale-btn" onClick={() => { setIsModalOpen(false); resetForm(); }}>Cancel</button>
               </div>
             </div>
           </div>
         )}
 
+        {/* New Reservation Modal */}
         {isResModalOpen && (
           <div className="modal-overlay">
             <div className="modal-box">
@@ -355,7 +388,7 @@ const SellerSection = ({ onLogout }) => {
                 </div>
                 <div className="form-group">
                   <label>Quantity</label>
-                  <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 0)} min="1" />
+                  <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(e.target.value === '' ? '' : parseInt(e.target.value))} min="1" />
                 </div>
                 <div className="form-group">
                   <label>Customer Name</label>
@@ -372,12 +405,13 @@ const SellerSection = ({ onLogout }) => {
               </div>
               <div className="modal-footer">
                 <button className="record-sale-btn" onClick={handleRecordReservation}>Create Reservation</button>
-                <button className="cancel-sale-btn" onClick={() => setIsResModalOpen(false)}>Cancel</button>
+                <button className="cancel-sale-btn" onClick={() => { setIsResModalOpen(false); resetForm(); }}>Cancel</button>
               </div>
             </div>
           </div>
         )}
 
+        {/* Message Packer Modal */}
         {isMsgModalOpen && (
           <div className="modal-overlay">
             <div className="modal-box">
@@ -391,7 +425,14 @@ const SellerSection = ({ onLogout }) => {
               <div className="modal-body">
                 <div className="form-group">
                   <label>Message</label>
-                  <textarea className="modal-input" placeholder="Type your message..." rows="4" style={{ resize: 'none', padding: '12px', fontFamily: 'inherit' }} value={packerMessage} onChange={(e) => setPackerMessage(e.target.value)} />
+                  <textarea
+                    className="modal-input"
+                    placeholder="Type your message..."
+                    rows="4"
+                    style={{ resize: 'none', padding: '12px', fontFamily: 'inherit' }}
+                    value={packerMessage}
+                    onChange={(e) => setPackerMessage(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="modal-footer">
@@ -402,6 +443,7 @@ const SellerSection = ({ onLogout }) => {
           </div>
         )}
 
+        {/* Custom Order Modal */}
         {isCustomOrderModalOpen && (
           <div className="modal-overlay">
             <div className="modal-box custom-order-modal">
@@ -420,7 +462,7 @@ const SellerSection = ({ onLogout }) => {
                 <div className="form-row">
                   <div className="form-group">
                     <label>Quantity</label>
-                    <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 0)} min="1" />
+                    <input type="number" className="modal-input" value={quantity} onChange={(e) => setQuantity(e.target.value === '' ? '' : parseInt(e.target.value))} min="1" />
                   </div>
                   <div className="form-group">
                     <label>Price per Cake</label>
@@ -433,7 +475,14 @@ const SellerSection = ({ onLogout }) => {
                 </div>
                 <div className="form-group">
                   <label>Special Instructions</label>
-                  <textarea className="modal-input" placeholder="Enter any special instructions" rows="2" style={{ resize: 'none', padding: '10px', fontFamily: 'inherit' }} value={customInstructions} onChange={(e) => setCustomInstructions(e.target.value)} />
+                  <textarea
+                    className="modal-input"
+                    placeholder="Enter any special instructions"
+                    rows="2"
+                    style={{ resize: 'none', padding: '10px', fontFamily: 'inherit' }}
+                    value={customInstructions}
+                    onChange={(e) => setCustomInstructions(e.target.value)}
+                  />
                 </div>
                 <div className="total-display compact-total">
                   <span>Total Amount:</span>
@@ -442,12 +491,32 @@ const SellerSection = ({ onLogout }) => {
               </div>
               <div className="modal-footer">
                 <button className="record-sale-btn" onClick={handleCreateCustomOrder}>Create Custom Order</button>
-                <button className="cancel-sale-btn" onClick={() => setIsCustomOrderModalOpen(false)}>Cancel</button>
+                <button className="cancel-sale-btn" onClick={() => { setIsCustomOrderModalOpen(false); resetForm(); }}>Cancel</button>
               </div>
             </div>
           </div>
         )}
+
       </main>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="toast-container">
+          <div className="toast-content">
+            <div className="toast-icon-wrapper">
+              <CheckCircle size={20} color="#fff" />
+            </div>
+            <div className="toast-text">
+              <p className="toast-main">Message Sent</p>
+              <p className="toast-sub">The packer has been notified.</p>
+            </div>
+            <button className="toast-close" onClick={() => setShowToast(false)}>
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
