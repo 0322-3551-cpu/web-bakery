@@ -1,14 +1,8 @@
 import React, { useState } from 'react'; // Added this
 import LoginSection from "./pages/login-section";
-<<<<<<< HEAD
-import PackerSection from "./pages/packer/dashboard";
-import SellerSection from "./pages/seller/dashboard";
-import ManagerSection from "./pages/manager/landing-page";
-=======
 import PackerSection from "./pages/packer-section";
 import SellerSection from "./pages/seller/seller-section";
 import ManagerSection from "./pages/manager-section";
->>>>>>> f9d4f3f99e5c29944c921e993bb89aa26c1708f6
 
 function App() {
   // Define the state here!
