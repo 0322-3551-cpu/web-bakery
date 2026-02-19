@@ -9,9 +9,11 @@ import UserManagement from "./userManagement";
 import SystemSettings from "./systemSettings";
 import DeliveryOverview from "./deliveriesOverview";
 import Messages from "./messages";
+
+// Import the CSS that contains the layout wrapper fixes
 import "../../styles/manager/landing-page.css";
 
-export default function ManagerLandingPage() {
+export default function ManagerLandingPage({ onLogout }) {
   const [activePage, setActivePage] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -39,27 +41,35 @@ export default function ManagerLandingPage() {
         return <UserManagement />;
       case "settings":
         return <SystemSettings />;
+      case "deliveries":
+        return <DeliveryOverview />;
+      case "messages":
+        return <Messages />;
       default:
         return <Dashboard setActivePage={setActivePage} />;
     }
   };
 
   return (
-    <div
-      className={`manager-layout ${
-        sidebarCollapsed ? "sidebar-collapsed" : ""
-      }`}
-    >
+    /* STEP 1: This is the main flex container that holds everything */
+    <div className="admin-layout-wrapper">
+      
+      {/* THE SIDEBAR: Fixed width (260px or 80px) */}
       <Sidebar
         activePage={activePage}
         onNavigate={handleNavigate}
         collapsed={sidebarCollapsed}
         onToggle={handleToggleSidebar}
+        onLogout={onLogout}
       />
 
-      <main className="manager-content">
-        <div className="content-inner">{renderPage()}</div>
+      {/* STEP 2: The Main Content Area: Stretches to fill remaining width */}
+      <main className="main-content-area">
+        <div className="content-inner">
+          {renderPage()}
+        </div>
       </main>
+
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; // Added this
 import LoginSection from "./pages/login-section";
 import PackerSection from "./pages/packer-section";
-import SellerSection from "./pages/seller-section";
+import SellerSection from "./pages/seller/seller-section";
 import ManagerSection from "./pages/manager-section";
 
 function App() {
