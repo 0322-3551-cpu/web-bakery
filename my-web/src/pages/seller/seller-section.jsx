@@ -9,6 +9,7 @@ import logo from '../../assets/logo.png';
 import SellerSales from './seller-sales';
 import SellerReservations from './seller-reservations';
 import SellerCustom from './seller-custom';
+import SellerMessages from './seller-messages';
 
 const SellerSection = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -279,14 +280,18 @@ const SellerSection = ({ onLogout }) => {
         )}
 
         {activeTab === 'sales' && <SellerSales transactions={salesHistory} />}
+        {activeTab === 'inventory' && <h1>Inventory Content Coming Soon...</h1>}
+        {activeTab === 'custom' && <SellerCustom customOrders={customOrdersList} />}
+        {activeTab === 'messages' && (
+          <SellerMessages onOpenMessageModal={() => setIsMsgModalOpen(true)} />
+        )}
         {activeTab === 'reservations' && (
           <SellerReservations
             reservations={reservationsHistory}
             onUpdateStatus={handleUpdateReservationStatus}
           />
         )}
-        {activeTab === 'inventory' && <h1>Inventory Content Coming Soon...</h1>}
-        {activeTab === 'custom' && <SellerCustom customOrders={customOrdersList} />}
+
 
         {isModalOpen && (
           <div className="modal-overlay">
