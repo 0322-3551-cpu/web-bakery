@@ -35,10 +35,11 @@ body, html {
   display: flex;
   flex-direction: column;
   width: var(--sidebar-width);
-  padding: 20px 0;
+  padding: 20px 0 0 0;
   background-color: var(--color-primary);
-  border-right: 1px solid #ddd;
+  border-right: none;
   flex-shrink: 0;
+  z-index:10
 }
 
 .sidebar-header {
@@ -99,8 +100,9 @@ body, html {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 10px;
-  padding: 0 15px;
+  gap: 0;
+  padding: 0;
+  border-top: none;
 }
 
 .nav-item {
@@ -108,20 +110,22 @@ body, html {
   align-items: center;
   width: 100%;
   gap: 12px;
-  padding: 12px 15px;
+  padding: 15px 20px;
   border: none;
-  border-radius: 8px;
-  background-color: var(--color-bg-main);
+  border-radius: 0;
+  border-bottom: 1px solid #f3071d; 
+  background-color: #f3071d;
+  color: #ffffff;
   font-family: var(--font-main);
   font-size: 0.95rem;
-  color: var(--color-text-dark);
   text-align: left;
   cursor: pointer;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .nav-item svg {
-  color: var(--color-text-dark);
+  color: #f7dd30;
   flex-shrink: 0;
 }
 
@@ -131,34 +135,62 @@ body, html {
   font-weight: bold;
 }
 
+.nav-item.active svg {
+  color: #000000 !important;
+}
+
 .nav-item:hover {
-  background-color: #ddd;
+  background-color: #d9061a;
+  border-bottom: 1px solid #d9061a;
+  outline: none;
 }
 
 .sidebar-footer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 15px;
+  gap: 0px;
+  padding: 0;
+  border-top: none;
 }
 
 .footer-nav-item {
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 10px;
-  padding: 12px 15px;
+  gap: 12px;
+  padding: 15px 20px;
   border: none;
-  border-radius: 8px;
-  background: var(--color-bg-main);
+  border-radius: 0; 
+ border-bottom: 1px solid #f3071d;
+  background-color: #f3071d;
+  color: #ffffff;
   font-family: var(--font-main);
-  color: var(--color-text-dark);
+  font-size: 0.95rem;
+  text-align: left;
   cursor: pointer;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
-.footer-nav-item:hover {
-  background-color: #ddd;
+.footer-nav-item svg {
+  color: #f7dd30;
+  flex-shrink: 0;
+}
+
+.nav-item.active {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-text-dark) !important;
+  font-weight: bold;
+}
+
+.footer-nav-item:hover { 
+  background-color: #d9061a;
+  border-bottom: 1px solid #d9061a;
+  outline: none;
+}
+
+footer-nav-item.active svg {
+  color: #000000 !important;
 }
 
 /*main*/
@@ -271,8 +303,13 @@ body, html {
   margin-left: auto;
   padding: 0;
   background-color: transparent;
-  color: var(--color-text-dark);
+  color:#ffffff;
   font-size: 0.95rem;
+  font-weight: normal;
+}
+
+.nav-item.active .badge {
+  color: #000000 !important;
   font-weight: bold;
 }
 
